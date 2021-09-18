@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mysql:8
+    environment:
+        MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - "3310:3306"
+    volumes:
+      - ./db/data:/var/lib/mysql:rw
+  app-php:
+    build: 
+      target: app-php
+      context: ./php
+    image: webapp/php
+    environment:
+      DATABASE_URL: mysql://root:123456@db/myApp
+    ports:
+      - "9002:9000"
+    volumes:
+      - ../:/var/www
+    links:
+      - db
+  nginx:
+    build: 
+      target: nginx
+      context: ./nginx
+    image: webapp/nginx
+    ports:
+      - "8082:80"
+    links:
+      - app-php
+    volumes_from:
+      - app-php
+    volumes:
+      - ./../logs/nginx/:/var/log/nginx
