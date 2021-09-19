@@ -2,7 +2,9 @@ FROM php:8.0.7-fpm as app-php
 
 RUN apt-get update
 
-RUN apt-get install libyaml-dev -y && pecl install yaml
+RUN apt-get install libyaml-dev -y \
+  && pecl install yaml \
+  && docker-php-ext-install pdo pdo_mysql
 
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
