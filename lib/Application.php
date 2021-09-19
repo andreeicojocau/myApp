@@ -1,36 +1,83 @@
 <?php
 
+use Auth\Auth;
 use Routing\Router;
+use Session\Session;
 use Helpers\PathHelper;
-use GuzzleHttp\Psr7\ServerRequest;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Application
 {
   use PathHelper;
-  public Router $router;
-  private $routesFile = 'routes.php';
+  private Auth $auth;
+  private Router $router;
+  private Capsule $database;
+  private Session $session;
+  private static $instance;
 
-  public function __construct()
+  /**
+   * Private constructor
+   */
+  private function __construct()
   {
-    $this->router = require($this->getConfigPath() . $this->routesFile);
+    /** Should load db only when needed .. */
+    $this->database = require($this->getConfigPath() . 'database.php');
+    $this->router   = require($this->getConfigPath() . 'routes.php');
+    $this->session  = new Session();
   }
 
+  /**
+   * Init function to create the instance
+   */
+  public static function getInstance(): self
+  {
+    if (!self::$instance) {
+      self::$instance = new self();
+    }
+
+    return self::$instance;
+  }
+
+  /** Actual application starter */
   public function run()
   {
-    $request  = ServerRequest::fromGlobals();
-    $route    = $this->router->match($request);
-    
-    $controllerName = $route->getClass();
-    $controller = new $controllerName($request);
-    
-    try {
-      if (!is_callable($controller)) {
-        $controller = [$controller, $route->getAction()];
-      }
+    $this->loadMigrations();
 
-      return $controller(...array_values($route->getVars()));
-    } catch (Exception $e) {
-      header("HTTP/1.0 404 Not Found");
+    $this->router->init();
+  }
+
+  /** Getters for services */
+  public function getRouter(): Router
+  {
+    return $this->router;
+  }
+
+  public function getAuth(): Auth
+  {
+    $this->auth = new Auth($this->session);
+
+    return $this->auth;
+  }
+
+  public function getSession(): Session
+  {
+    return $this->session;
+  }
+
+  /**
+   * Migrate all migrations every time
+   * Needs furhter implementation 
+   * 1. make a migrations table
+   * 2. make script to run in console
+   */
+  public function loadMigrations()
+  {
+    $dir = scandir($this->getDatabasePath());
+    
+    foreach($dir as $migration) {
+      if($migration == '.' || $migration == '..') continue;
+
+      require $this->getDatabasePath() . $migration;
     }
   }
 }

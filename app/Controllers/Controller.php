@@ -3,7 +3,7 @@
 namespace Controllers;
 
 use Template\View;
-use GuzzleHttp\Psr7\Response;
+use Routing\Router;
 use GuzzleHttp\Psr7\ServerRequest;
 
 abstract class Controller
@@ -21,33 +21,67 @@ abstract class Controller
   public ServerRequest $request;
 
   /**
-   * Response object
-   */
-  public Response $response;
-
-  /**
    * View object
    */
   private View $view;
 
   /**
+   * Router object
+   */
+  private Router $router;
+
+  /**
    * Constructor
+   * 
+   * @param ServerRequest $request
    */
   public function __construct(ServerRequest $request)
   {
     $this->request  = $request;
-    $this->response = new Response();
     $this->view     = new View();
-    // $this->router   = 
+    $this->router   = router();
   }
 
-  public function render($template, $data)
+  /**
+   * Calls the process method to check params and render the view
+   * 
+   * @param string $template
+   * @param array $data
+   */
+  public function render(string $template, array $data = [])
   {
-    $this->view->process($template, $data);
+    return $this->view->process($template, $data);
   }
 
-  public function redirect($route)
+  /**
+   * Redirect helper to move between routes
+   * 
+   * @param string $route
+   * @param array $params
+   */
+  public function redirect(string $route, array $params = [])
   {
+    return $this->router->redirectTo($route, $params);
+  }
+  
+  /**
+   * If default needs to change
+   * @param  string $template
+   * @return void
+   */
+  public function setLayout(string $template)
+  {
+    $this->view->setLayout($template);
+  }
 
+  /**
+   * Sets the layout to false and renders the view instead
+   *
+   * @param  mixed $template
+   * @return void
+   */
+  public function disableLayout()
+  {
+    $this->view->disableLayout();
   }
 }

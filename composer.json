@@ -4,9 +4,15 @@
     "require": {
         "php": "^8.0",
         "symfony/var-dumper": "^5.3",
-        "guzzlehttp/psr7": "^2.0"
+        "guzzlehttp/psr7": "^2.0",
+        "illuminate/database": "^8.61"
     },
     "config": {
         "vendor-dir": "vendor"
+    },
+    "autoload": {
+        "files": [
+            "lib/helpers.php"
+        ]
     }
 }

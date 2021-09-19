@@ -2,10 +2,9 @@
 
 namespace Routing;
 
-/**
- * Class Route
- */
-final class Route
+use InvalidArgumentException;
+
+class Route
 {
   /**
    * @var string
@@ -48,7 +47,7 @@ final class Route
   public function __construct(string $name, string $path, string $class, string $action,  array $methods)
   {
     if ($methods === []) {
-      throw new \InvalidArgumentException('HTTP methods argument was empty; must contain at least one method');
+      throw new InvalidArgumentException('HTTP methods argument was empty; must contain at least one method');
     }
 
     $this->name = $name;

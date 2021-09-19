@@ -18,4 +18,9 @@ trait PathHelper
   {
     return $this->getRootDir() . 'templates' . DIRECTORY_SEPARATOR;
   }
+
+  public function getDatabasePath()
+  {
+    return $this->getRootDir() . 'database' . DIRECTORY_SEPARATOR;
+  }
 }
