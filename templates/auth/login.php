@@ -6,8 +6,8 @@
           <p class="error fadeIn first"><?php echo $this->getError($key); ?></p>
         <?php endforeach; ?>
       <?php endif; ?>
-      <input type="email" required="true" id="email" class="fadeIn second" name="email" placeholder="email">
-      <input type="password" required="true" id="password" class="fadeIn third" name="password" placeholder="password">
+      <input type="email" required="true" id="email" class="fadeIn second" name="email" placeholder="Email">
+      <input type="password" required="true" id="password" class="fadeIn third" name="password" placeholder="Password">
       <input type="submit" class="fadeIn fourth" value="Log In">
     </form>
 

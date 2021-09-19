@@ -38,7 +38,7 @@ class Session
    */
   public function get(string $key): mixed
   {
-    return $_SESSION[$key];
+    return $_SESSION[$key] ?? NULL;
   }
 
   /**
@@ -83,7 +83,16 @@ class Session
 
     if (isset($_SESSION[$key]) && isset($_SESSION[$key][$child])) {
       $ret = $_SESSION[$key][$child];
-      // unset($_SESSION[$key][$child]);
+      /** 
+       * Don't know why this does not work 
+       * It removes for some reason the session 
+       * on redirect twice or something i can't figure out
+       * */
+      $this->delete($key, $child);
+
+      if(empty($_SESSION[$key])) {
+        $this->delete($key);
+      }
       
       return $ret;
     }

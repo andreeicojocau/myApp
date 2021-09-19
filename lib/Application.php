@@ -24,6 +24,7 @@ class Application
     $this->database = require($this->getConfigPath() . 'database.php');
     $this->router   = require($this->getConfigPath() . 'routes.php');
     $this->session  = new Session();
+    $this->auth     = new Auth($this->session);
   }
 
   /**
@@ -54,8 +55,6 @@ class Application
 
   public function getAuth(): Auth
   {
-    $this->auth = new Auth($this->session);
-
     return $this->auth;
   }
 

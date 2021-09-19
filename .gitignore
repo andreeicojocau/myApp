@@ -1,3 +1,5 @@
 /vendor
 /docker/db
 /logs
+/.history
+/node_modules

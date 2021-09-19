@@ -4,7 +4,6 @@ namespace Helpers;
 
 trait AuthHelper 
 {
-  
   public function passwordCheck($plainPassword, $encryptedPassword)
   {
     return password_verify($plainPassword, $encryptedPassword);

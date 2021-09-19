@@ -5,9 +5,11 @@ namespace Controllers;
 use Template\View;
 use Routing\Router;
 use GuzzleHttp\Psr7\ServerRequest;
+use Helpers\Flash;
 
 abstract class Controller
 {
+  use Flash;
   /**
    * HTTP header status code.
    *
@@ -83,5 +85,15 @@ abstract class Controller
   public function disableLayout()
   {
     $this->view->disableLayout();
+  }
+
+  /**
+   * Sets the active menu in view
+   * 
+   * @param string $menu
+   */
+  public function setActiveMenu(string $menu)
+  {
+    $this->view->setActiveMenu($menu);
   }
 }

@@ -16,14 +16,14 @@ class View
   protected array $data;
 
   /**
-   * Output buffering str
+   * Active menu
    */
-  protected string $obStr;
+  protected string $activeMenu = 'dashboard';
 
   /**
    * Template path
    */
-  public string $template;
+  protected string $template;
 
   /**
    * Checker for the layout
@@ -33,11 +33,12 @@ class View
   /**
    * Layout template path
    */
-  protected string $layout = 'layouts/layout.php';
+  protected string $layout = 'layout/layout.php';
 
   /**
    * Main function called by controller to render
    * the view with data
+   * Decides if template is standalone or with layout
    * 
    * @param String $template
    * @param array $data
@@ -113,5 +114,15 @@ class View
   public function disableLayout()
   {
     $this->hasLayout = false;
+  }
+
+  /**
+   * Active menu setter
+   * 
+   * @param string $menu
+   */
+  public function setActiveMenu(string $menu)
+  {
+    $this->activeMenu = $menu;
   }
 }
